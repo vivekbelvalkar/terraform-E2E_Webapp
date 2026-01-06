@@ -35,3 +35,33 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Terraform
+**/.terraform/*
+**/*.tfstate
+**/*.tfstate.*
+crash.log
+
+# Terraform variable files (if sensitive)
+*.tfvars
+
+# SSH Keys
+*.pem
+*.ppk
+
+# OS / Editor
+.DS_Store
+.vscode/
+.idea/
+
+# SSH / PEM keys
+*.pem
+*.key
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+*.pub
+
+# Other keys
+*key-pair*
