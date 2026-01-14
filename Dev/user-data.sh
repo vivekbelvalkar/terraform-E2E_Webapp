@@ -18,16 +18,17 @@ SECRET_JSON=$(aws secretsmanager get-secret-value \
 DB_NAME=$(echo $SECRET_JSON | jq -r .database)
 DB_USERNAME=$(echo $SECRET_JSON | jq -r .app_user)
 DB_PASSWORD=$(echo $SECRET_JSON | jq -r .app_password)
+DB_URL="jdbc:mysql://${DB_HOST}:${DB_PORT}/$${DB_NAME}"
 
-export DB_URL="jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}"
+export DB_URL
 export DB_USERNAME
 export DB_PASSWORD
 
 # Persist env vars for Spring Boot
 cat <<EOF >> /etc/environment
-DB_URL=${DB_URL}
-DB_USERNAME=${DB_USERNAME}
-DB_PASSWORD=${DB_PASSWORD}
+DB_URL=$${DB_URL}
+DB_USERNAME=$${DB_USERNAME}
+DB_PASSWORD=$${DB_PASSWORD}
 EOF
 
 # -------------------------------
