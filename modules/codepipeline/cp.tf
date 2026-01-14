@@ -46,4 +46,23 @@ resource "aws_codepipeline" "ems-codepipeline" {
     }
   }
 
+  stage {
+  name = "Deploy"
+
+  action {
+    name            = "Deploy_To_EC2"
+    category        = "Deploy"
+    owner           = "AWS"
+    provider        = "CodeDeploy"
+    version         = "1"
+
+    input_artifacts = ["build_output"]
+
+    configuration = {
+      ApplicationName     = var.codedeploy_app_name
+      DeploymentGroupName = var.codedeploy_deployment_group
+    }
+  }
+}
+
 }

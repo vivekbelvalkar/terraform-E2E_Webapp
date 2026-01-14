@@ -8,9 +8,6 @@ resource "aws_launch_template" "webservers-launch-template" {
   }
 
   user_data = base64encode(templatefile("user-data.sh", {
-      ARTIFACT_BUCKET = var.artifact_bucket
-      DB_HOST= var.db_host
-      DB_PORT= var.db_port
       cw_agent_config = templatefile("cw-agent.json",{
       ENVIRONMENT = "${var.env}"
       })

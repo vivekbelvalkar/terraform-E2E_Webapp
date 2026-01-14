@@ -5,3 +5,5 @@ variable "github_owner" {}
 variable "github_repo" {}
 variable "github_token" {}
 variable "codebuild_project_name" {}
+variable "codedeploy_app_name" {}
+variable "codedeploy_deployment_group" {}

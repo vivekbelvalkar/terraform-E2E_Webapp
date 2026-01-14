@@ -98,12 +98,22 @@ module "codepipeline"{
   github_repo = var.github_repo
   github_token = var.github_token
   codebuild_project_name = module.codebuild.codebuild_project_name
+  codedeploy_app_name = module.codedeploy.codedeploy_app_name
+  codedeploy_deployment_group = module.codedeploy.codedeploy_deployment_group
 }
 
 module "codebuild" {
   source = "../modules/codebuild"
   env = var.env
   role_arn = module.iam.codebuild_role_arn
+}
+
+module "codedeploy" {
+  source = "../modules/codedeploy"
+  env = var.env
+  codedeploy_role_arn = module.iam.codedeploy_role_arn
+  asg_name = module.webservers.asg_name
+  target_group_name = module.loadbalancer.target_group_name
 }
 
 module "cloudwatch"{
