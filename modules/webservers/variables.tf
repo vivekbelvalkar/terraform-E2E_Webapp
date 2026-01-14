@@ -7,6 +7,7 @@ variable "public_subnet-2_id" {}
 variable "load-balancer-target-group-arn" {}
 variable "webservers-key-pair-key_name" {}
 variable "instance_profile" {}
+variable "artifact_bucket" {}
 
 data "aws_ec2_instance_types" "free_tier_instances_type" {
     filter {

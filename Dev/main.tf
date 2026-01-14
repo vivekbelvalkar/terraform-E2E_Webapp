@@ -42,7 +42,7 @@ module "loadbalancer"{
   public_subnet-1_id=module.subnet.public_subnet-1_id
   public_subnet-2_id=module.subnet.public_subnet-2_id
   webservers-alb-sg-id=module.security_groups.webservers-alb-sg-id
-  create_lb = false
+  create_lb = true
 }
 
 module "webservers"{
@@ -52,7 +52,9 @@ module "webservers"{
   public_subnet-1_id=module.subnet.public_subnet-1_id
   public_subnet-2_id=module.subnet.public_subnet-2_id
   load-balancer-target-group-arn=module.loadbalancer.load-balancer-target-group-arn
-  webservers-key-pair-key_name="dev-webservers-key-pair"
+  webservers-key-pair-key_name="dev-ems-webservers-key-pair"
+  instance_profile = module.iam.ec2_instance_profile
+  artifact_bucket = module.s3.bucket_name
 }
 
 module "rds"{
@@ -61,4 +63,36 @@ module "rds"{
   mysql-rds-sg-id = module.security_groups.mysql-rds-sg
   private_subnet-1_id = module.subnet.private_subnet-1_id
   private_subnet-2_id = module.subnet.private_subnet-2_id
+}
+
+module "iam" {
+  source = "../modules/iam"
+  env = var.env
+}
+
+module "s3"{
+  source = "../modules/s3"
+  env = var.env
+}
+
+module "codepipeline"{
+  source = "../modules/codepipeline"
+  env = var.env
+  role_arn = module.iam.codepipeline_role_arn
+  bucket = module.s3.bucket_name
+  github_owner = ""
+  github_repo = ""
+  github_token = ""
+  codebuild_project_name = "ems-springboot-webapp"
+}
+
+module "codebuild" {
+  source = "../modules/codebuild"
+  env = var.env
+  role_arn = module.iam.codebuild_role_arn
+}
+
+module "cloudwatch"{
+  source = "../modules/cloudwatch"
+  env = var.env
 }

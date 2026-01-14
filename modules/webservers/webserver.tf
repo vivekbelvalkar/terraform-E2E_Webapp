@@ -7,7 +7,12 @@ resource "aws_launch_template" "webservers-launch-template" {
     name = var.instance_profile
   }
 
-  user_data = base64encode(file("user-data.sh"))
+  user_data = base64encode(templatefile("user-data.sh", {
+      ARTIFACT_BUCKET = var.artifact_bucket
+      cw_agent_config = templatefile("cw-agent.json",{
+      ENVIRONMENT = "${var.env}"
+      })
+    }))
 
   vpc_security_group_ids = [var.webservers-security-group-id]
   key_name = var.webservers-key-pair-key_name
