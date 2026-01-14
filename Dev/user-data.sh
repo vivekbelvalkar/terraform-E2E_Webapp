@@ -4,7 +4,7 @@ yum install -y java-17-amazon-corretto amazon-cloudwatch-agent ruby wget
 
 # Install CodeDeploy agent
 cd /home/ec2-user
-wget https://aws-codedeploy-${AWS_REGION}.s3.${AWS_REGION}.amazonaws.com/latest/install
+wget https://aws-codedeploy-$${AWS_REGION}.s3.$${AWS_REGION}.amazonaws.com/latest/install
 chmod +x ./install
 ./install auto
 
