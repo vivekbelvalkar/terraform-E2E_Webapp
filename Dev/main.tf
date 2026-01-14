@@ -62,11 +62,11 @@ module "webservers"{
 module "aws_secretsmanager_secret" {
   source = "../modules/secrets"
   env = var.env
-  master_user = ""
-  master_pass = ""
-  app_user = ""
-  app_password = ""
-  database = ""
+  master_user = var.master_user
+  master_pass = var.master_pass
+  app_user = var.app_user
+  app_password = var.app_password
+  database = var.database
 }
 
 module "rds"{
@@ -94,10 +94,10 @@ module "codepipeline"{
   env = var.env
   role_arn = module.iam.codepipeline_role_arn
   bucket = module.s3.bucket_name
-  github_owner = ""
-  github_repo = ""
-  github_token = ""
-  codebuild_project_name = "ems-springboot-webapp"
+  github_owner = var.github_owner
+  github_repo = var.github_repo
+  github_token = var.github_token
+  codebuild_project_name = module.codebuild.codebuild_project_name
 }
 
 module "codebuild" {
