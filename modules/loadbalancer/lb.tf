@@ -11,7 +11,7 @@ resource "aws_lb" "webservers-load-balancer" {
 # Add Target Group
 resource "aws_lb_target_group" "load-balancer-target-group" {
   name     = "${var.env}-ems-lb-target-group"
-  port     = 80
+  port     = 8080
   protocol = "HTTP"
   vpc_id   = var.vpc_id
   tags = {
