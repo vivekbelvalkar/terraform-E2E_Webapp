@@ -1,7 +1,7 @@
 resource "aws_eip" "eip" {
     domain = "vpc"
     tags = {
-      Name = "${var.env}-eip"
+      Name = "${var.env}-ems-eip"
     }
 }
 
@@ -10,7 +10,7 @@ resource "aws_nat_gateway" "NATgw" {
   subnet_id     = var.public_subnet-1_id
 
   tags = {
-    Name = "${var.env}-NATgw"
+    Name = "${var.env}-ems-NATgw"
   }
   # To ensure proper ordering, it is recommended to add an explicit dependency
   # on the Internet Gateway for the VPC.
@@ -21,6 +21,6 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = var.vpc_id
 
   tags = {
-    Name = "${var.env}-igw"
+    Name = "${var.env}-ems-igw"
   }
 }

@@ -4,7 +4,7 @@ resource "aws_subnet" "public_subnet-1" {
   availability_zone = "${var.region}a"
   map_public_ip_on_launch=true
   tags = {
-    Name = "${var.env}-public_subnet-1"
+    Name = "${var.env}-ems-public_subnet-1"
   }
 }
 
@@ -14,7 +14,7 @@ resource "aws_subnet" "public_subnet-2" {
   availability_zone = "${var.region}b"
   map_public_ip_on_launch=true
   tags = {
-    Name = "${var.env}-public_subnet-2"
+    Name = "${var.env}-ems-public_subnet-2"
   }
 }
 
@@ -24,7 +24,7 @@ resource "aws_subnet" "private_subnet-1" {
   cidr_block = "10.0.4.0/24"
   availability_zone = "${var.region}a"
   tags = {
-    Name = "${var.env}-private_subnet-1"
+    Name = "${var.env}-ems-private_subnet-1"
   }
 }
 
@@ -33,6 +33,6 @@ resource "aws_subnet" "private_subnet-2" {
   cidr_block = "10.0.5.0/24"
   availability_zone = "${var.region}b"
   tags = {
-    Name = "${var.env}-private_subnet-2"
+    Name = "${var.env}-ems-private_subnet-2"
   }
 }

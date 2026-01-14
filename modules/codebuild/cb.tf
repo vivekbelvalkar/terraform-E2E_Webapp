@@ -1,8 +1,11 @@
-resource "aws_codebuild_project" "springboot-build" {
-  name          = "springboot-build"
+resource "aws_codebuild_project" "ems-codebuild" {
+  name          = "${var.env}-ems-codebuild"
   service_role = var.role_arn
 
   artifacts { type = "CODEPIPELINE" }
+  tags = {
+    name= "${var.env}-ems-codebuild"
+  }
 
   environment {
     compute_type = "BUILD_GENERAL1_SMALL"

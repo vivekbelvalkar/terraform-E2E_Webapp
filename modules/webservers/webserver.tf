@@ -1,5 +1,5 @@
 resource "aws_launch_template" "webservers-launch-template" {
-  name   = "${var.env}-webservers-launch-template"
+  name   = "${var.env}-ems-webservers-launch-template"
   image_id      = "${data.aws_ami.ubuntu.id}"
   instance_type = "${data.aws_ec2_instance_types.free_tier_instances_type.instance_types[0]}"
 
@@ -19,7 +19,7 @@ resource "aws_launch_template" "webservers-launch-template" {
 }
 
 resource "aws_autoscaling_group" "webserver-autoscaling-group" {
-  name                      = "${var.env}-webserver-autoscaling-group"
+  name                      = "${var.env}-ems-webserver-autoscaling-group"
   max_size                  = 2
   min_size                  = 1
   health_check_grace_period = 30
@@ -35,6 +35,6 @@ resource "aws_autoscaling_group" "webserver-autoscaling-group" {
 
 #Resource key pair
 resource "aws_key_pair" "webservers-key-pair" {
-  key_name      = "${var.env}-webservers-key-pair"
-  public_key    = file("${var.env}-webservers-key-pair.pub")
+  key_name      = "${var.env}-ems-webservers-key-pair"
+  public_key    = file("${var.env}-ems-webservers-key-pair.pub")
 }

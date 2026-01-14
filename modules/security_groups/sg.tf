@@ -1,6 +1,6 @@
 resource "aws_security_group" "mysql-rds-sg" {
 
-  name = "${var.env}-mysql-rds-sg"
+  name = "${var.env}-ems-mysql-rds-sg"
   description = "Created by Terraform"
   vpc_id      = var.vpc_id
 
@@ -23,17 +23,17 @@ resource "aws_security_group" "mysql-rds-sg" {
   }
 
     tags = {
-    Name = "${var.env}-mysql-rds-sg"
+    Name = "${var.env}-ems-mysql-rds-sg"
    }
 }
 
 
 resource "aws_security_group" "webservers-security-group"{
   tags = {
-    Name = "${var.env}-webservers-security-group"
+    Name = "${var.env}-ems-webservers-security-group"
   }
   
-  name          = "${var.env}-webservers-security-group"
+  name          = "${var.env}-ems-webservers-security-group"
   description   = "Created by Terraform"
   vpc_id        = var.vpc_id
 
@@ -72,9 +72,9 @@ resource "aws_security_group" "webservers-security-group"{
 
 resource "aws_security_group" "webservers-alb-sg" {
   tags = {
-    Name = "${var.env}-webservers-alb-sg"
+    Name = "${var.env}-ems-webservers-alb-sg"
   }
-  name = "${var.env}-webservers-alb-sg"
+  name = "${var.env}-ems-webservers-alb-sg"
   description = "Created by Terraform"
   vpc_id      = var.vpc_id
 

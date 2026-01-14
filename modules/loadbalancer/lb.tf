@@ -1,7 +1,7 @@
 #Application load balancer for app server
 resource "aws_lb" "webservers-load-balancer" {
   count = var.create_lb == true ? 1:0
-  name               = "${var.env}-webservers-load-balancer"
+  name               = "${var.env}-ems-webservers-load-balancer"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [var.webservers-alb-sg-id]
@@ -10,12 +10,12 @@ resource "aws_lb" "webservers-load-balancer" {
 
 # Add Target Group
 resource "aws_lb_target_group" "load-balancer-target-group" {
-  name     = "${var.env}-load-balancer-target-group"
+  name     = "${var.env}-ems-load-balancer-target-group"
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
   tags = {
-    name= "${var.env}-load-balancer-target-group"
+    name= "${var.env}-ems-load-balancer-target-group"
   }
 }
 

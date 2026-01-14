@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ec2" {
-  name = "ec2-springboot-role"
+  name = "${var.env}-ems-ec2-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -9,6 +9,10 @@ resource "aws_iam_role" "ec2" {
       Action = "sts:AssumeRole"
     }]
   })
+
+  tags = {
+    name= "${var.env}-ems-ec2-role"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_s3" {
@@ -23,4 +27,7 @@ resource "aws_iam_role_policy_attachment" "ec2_cw" {
 
 resource "aws_iam_instance_profile" "ec2" {
   role = aws_iam_role.ec2.name
+  tags = {
+    name= "${var.env}-ems-iam_instance_profile"
+  }
 }

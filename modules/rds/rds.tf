@@ -1,5 +1,5 @@
 resource "aws_db_instance" "mysql-rds" {
-  identifier = "${var.env}-mysql-rds"
+  identifier = "${var.env}-ems-mysql-rds"
   allocated_storage = "10"
   storage_type = "gp2"
   engine = "mysql"
@@ -20,19 +20,19 @@ resource "aws_db_instance" "mysql-rds" {
 
 resource "aws_db_subnet_group" "mysql-rds-subnet-group" {
 
-    name          = "${var.env}-mysql-rds-subnet-group"
+    name          = "${var.env}-ems-mysql-rds-subnet-group"
     description   = "Allowed subnets for DB cluster instances"
     subnet_ids    = [
       var.private_subnet-1_id,
       var.private_subnet-2_id,
     ]
     tags = {
-        Name         = "${var.env}-mysql-rds-subnet-group"
+        Name         = "${var.env}-ems-mysql-rds-subnet-group"
     }
 }
 
 resource "aws_db_parameter_group" "mysql-parameter-group" {
-  name   = "${var.env}-mysql-parameter-group"
+  name   = "${var.env}-ems-mysql-parameter-group"
   family = "mysql8.0"
 
   parameter {
@@ -45,7 +45,7 @@ resource "aws_db_parameter_group" "mysql-parameter-group" {
     value = "utf8"
   }
   tags = {
-        Name         = "${var.env}-mysql-parameter-group"
+        Name         = "${var.env}-ems-mysql-parameter-group"
     }
 }
 

@@ -1,5 +1,5 @@
 resource "aws_iam_role" "codebuild" {
-  name = "codebuild-role"
+  name = "${var.env}-ems-codebuild-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -9,6 +9,10 @@ resource "aws_iam_role" "codebuild" {
       Action = "sts:AssumeRole"
     }]
   })
+
+  tags = {
+    name= "${var.env}-ems-codebuild-role"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "codebuild_policy" {

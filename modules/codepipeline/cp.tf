@@ -1,11 +1,14 @@
-resource "aws_codepipeline" "this" {
-  name     = "springboot-pipeline"
+resource "aws_codepipeline" "ems-codepipeline" {
+  name     = "${var.env}-ems-codepipeline"
   role_arn = var.role_arn
 
   artifact_store {
     location = var.bucket
     type     = "S3"
   }
+  tags = {
+    name="${var.env}-ems-codepipeline"
+    }
 
     stage {
     name = "Source"

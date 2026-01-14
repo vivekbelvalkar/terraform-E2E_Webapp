@@ -7,7 +7,7 @@ resource "aws_route_table" "public_rt" {
   }
 
   tags = {
-    Name = "${var.env}-public_rt"
+    Name = "${var.env}-ems-public_rt"
   }
 }
 
@@ -31,7 +31,7 @@ resource "aws_route_table" "private_rt" {
   }
 
   tags = {
-    Name = "${var.env}-private_rt"
+    Name = "${var.env}-ems-private_rt"
   }
 }
 
