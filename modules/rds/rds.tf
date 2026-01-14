@@ -7,16 +7,14 @@ resource "aws_db_instance" "mysql-rds" {
   instance_class = "db.t3.micro"
   backup_retention_period = "0"
   publicly_accessible = "true"
-  username = "appuser"
-  password = "appuser380"
+  username = var.master_user
+  password = var.master_pass
+  port = "3306"
   vpc_security_group_ids = [var.mysql-rds-sg-id]
   db_subnet_group_name = aws_db_subnet_group.mysql-rds-subnet-group.name
   parameter_group_name = aws_db_parameter_group.mysql-parameter-group.name
   multi_az = "false"
 }
-
-
-
 
 resource "aws_db_subnet_group" "mysql-rds-subnet-group" {
 

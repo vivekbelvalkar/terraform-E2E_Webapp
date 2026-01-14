@@ -55,6 +55,18 @@ module "webservers"{
   webservers-key-pair-key_name="dev-ems-webservers-key-pair"
   instance_profile = module.iam.ec2_instance_profile
   artifact_bucket = module.s3.bucket_name
+  db_host = module.rds.db_host
+  db_port = module.rds.db_port
+}
+
+module "aws_secretsmanager_secret" {
+  source = "../modules/secrets"
+  env = var.env
+  master_user = ""
+  master_pass = ""
+  app_user = ""
+  app_password = ""
+  database = ""
 }
 
 module "rds"{
@@ -63,6 +75,8 @@ module "rds"{
   mysql-rds-sg-id = module.security_groups.mysql-rds-sg
   private_subnet-1_id = module.subnet.private_subnet-1_id
   private_subnet-2_id = module.subnet.private_subnet-2_id
+  master_user = module.aws_secretsmanager_secret.master_user
+  master_pass = module.aws_secretsmanager_secret.master_pass
 }
 
 module "iam" {

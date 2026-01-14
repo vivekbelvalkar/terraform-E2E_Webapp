@@ -8,6 +8,8 @@ variable "load-balancer-target-group-arn" {}
 variable "webservers-key-pair-key_name" {}
 variable "instance_profile" {}
 variable "artifact_bucket" {}
+variable "db_host" {}
+variable "db_port" {}
 
 data "aws_ec2_instance_types" "free_tier_instances_type" {
     filter {
