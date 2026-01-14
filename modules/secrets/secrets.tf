@@ -1,12 +1,28 @@
-resource "aws_secretsmanager_secret" "ems_db" {
-  name = "${var.env}-ems-db-credentials"
+resource "aws_secretsmanager_secret" "ems_db_master" {
+  name = "${var.env}-ems-db-master-credentials"
   tags = {
-    name= "${var.env}-ems-db-credentials"
+    name= "${var.env}-ems-db-master-credentials"
+  }
+}
+
+resource "aws_secretsmanager_secret_version" "ems_db_master_creds" {
+  secret_id = aws_secretsmanager_secret.ems_db_master.id
+
+  secret_string = jsonencode({
+    username = var.master_user
+    password = var.master_pass
+  })
+}
+
+resource "aws_secretsmanager_secret" "ems_db_appuser" {
+  name = "${var.env}-ems-db-appuser-credentials"
+  tags = {
+    name= "${var.env}-ems-db-appuser-credentials"
   }
 }
 
 resource "aws_secretsmanager_secret_version" "ems_db_appuser_creds" {
-  secret_id = aws_secretsmanager_secret.ems_db.id
+  secret_id = aws_secretsmanager_secret.ems_db_appuser.id
 
   secret_string = jsonencode({
     username = var.app_user
@@ -15,11 +31,4 @@ resource "aws_secretsmanager_secret_version" "ems_db_appuser_creds" {
   })
 }
 
-resource "aws_secretsmanager_secret_version" "ems_db_master_creds" {
-  secret_id = aws_secretsmanager_secret.ems_db.id
 
-  secret_string = jsonencode({
-    username = var.master_user
-    password = var.master_pass
-  })
-}
