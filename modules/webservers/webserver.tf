@@ -1,19 +1,14 @@
-resource "aws_launch_template" "webservers-launch-config" {
-  name   = "${var.env}-webservers-launch-config"
+resource "aws_launch_template" "webservers-launch-template" {
+  name   = "${var.env}-webservers-launch-template"
   image_id      = "${data.aws_ami.ubuntu.id}"
   instance_type = "${data.aws_ec2_instance_types.free_tier_instances_type.instance_types[0]}"
-  user_data = base64encode(<<-EOF
-    #!/bin/bash
-    apt-get update
-    apt-get -y install net-tools nginx
 
-    MYIP=$(hostname -I | awk '{print $1}')
-    echo "Hello Team
-    This is my IP: $MYIP" > /var/www/html/index.html
+  iam_instance_profile {
+    name = var.instance_profile
+  }
 
-    systemctl start nginx
-  EOF
-  )
+  user_data = base64encode(file("user-data.sh"))
+
   vpc_security_group_ids = [var.webservers-security-group-id]
   key_name = var.webservers-key-pair-key_name
   
@@ -32,7 +27,7 @@ resource "aws_autoscaling_group" "webserver-autoscaling-group" {
   desired_capacity          = 1
   force_delete              = true
   launch_template {
-        id = aws_launch_template.webservers-launch-config.id   
+        id = aws_launch_template.webservers-launch-template.id   
   }      
   vpc_zone_identifier       = [var.public_subnet-1_id, var.public_subnet-2_id]
   target_group_arns         = [var.load-balancer-target-group-arn]
