@@ -55,8 +55,6 @@ module "webservers"{
   webservers-key-pair-key_name="dev-ems-webservers-key-pair"
   instance_profile = module.iam.ec2_instance_profile
   artifact_bucket = module.s3.bucket_name
-  db_host = module.rds.db_host
-  db_port = module.rds.db_port
 }
 
 module "aws_secretsmanager_secret" {
@@ -67,6 +65,13 @@ module "aws_secretsmanager_secret" {
   app_user = var.app_user
   app_password = var.app_password
   database = var.database
+}
+
+module "ssmparameter"{
+  source = "../modules/ssmparameter"
+  env = var.env
+  db_host = module.rds.db_host
+  db_port = module.rds.db_port
 }
 
 module "rds"{

@@ -8,6 +8,7 @@ resource "aws_launch_template" "webservers-launch-template" {
   }
 
   user_data = base64encode(templatefile("user-data.sh", {
+      ENVIRONMENT =  "${var.env}"
       cw_agent_config = templatefile("cw-agent.json",{
       ENVIRONMENT = "${var.env}"
       })
