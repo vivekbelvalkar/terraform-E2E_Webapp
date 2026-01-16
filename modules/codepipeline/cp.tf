@@ -63,6 +63,23 @@ resource "aws_codepipeline" "ems-codepipeline" {
   }
 }
 
+stage {
+  name = "Deploy"
+
+  action {
+    name            = "ASG-Instance-Refresh"
+    category        = "Build"
+    owner           = "AWS"
+    provider        = "CodeBuild"
+    version         = "1"
+    input_artifacts = ["build"]
+
+    configuration = {
+      ProjectName = var.asg_refresh_codebuild_project_name
+    }
+  }
+}
+
 
   # stage {
   # name = "Deploy"

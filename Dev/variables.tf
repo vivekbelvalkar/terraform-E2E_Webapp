@@ -7,7 +7,9 @@ variable "region" {
     type = string
     default = "ap-south-1"
 }
-
+variable "webserver_key_pair_name" {
+  type = string
+}
 variable "github_owner" {
   type = string
 }
@@ -46,4 +48,8 @@ variable "master_pass" {
 
 variable "sql_data_s3_key"{
   type = string
+}
+
+variable "create_lb" {
+  type = bool
 }

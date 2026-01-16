@@ -42,7 +42,7 @@ module "loadbalancer"{
   public_subnet-1_id=module.subnet.public_subnet-1_id
   public_subnet-2_id=module.subnet.public_subnet-2_id
   webservers-alb-sg-id=module.security_groups.webservers-alb-sg-id
-  create_lb = false
+  create_lb = var.create_lb
 }
 
 module "webservers"{
@@ -52,7 +52,7 @@ module "webservers"{
   public_subnet-1_id=module.subnet.public_subnet-1_id
   public_subnet-2_id=module.subnet.public_subnet-2_id
   load-balancer-target-group-arn=module.loadbalancer.load-balancer-target-group-arn
-  webservers-key-pair-key_name="dev-ems-webservers-key-pair"
+  webservers-key-pair-key_name= var.webserver_key_pair_name
   instance_profile = module.iam.ec2_instance_profile
   artifact_bucket = module.s3.bucket_name
   depends_on = [ module.rds ]
@@ -105,6 +105,7 @@ module "codepipeline"{
   github_token = var.github_token
   codebuild_project_name = module.codebuild.codebuild_project_name
   db_bootstrap_lambda_func_name = module.lambda-db-bootstrap.db_bootstrap_lambda_func_name
+  asg_refresh_codebuild_project_name = module.codebuild.asg_refresh_codebuild_project_name
   # codedeploy_app_name = module.codedeploy.codedeploy_app_name
   # codedeploy_deployment_group = module.codedeploy.codedeploy_deployment_group
 }
@@ -113,6 +114,7 @@ module "codebuild" {
   source = "../modules/codebuild"
   env = var.env
   role_arn = module.iam.codebuild_role_arn
+  asg_name = module.webservers.asg_name
 }
 
 # module "codedeploy" {
