@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "db_bootstrap" {
   function_name = "${var.env}-db-bootstrap"
   role          = var.lambda_role_arn
-  handler       = "DbBootstrapHandler::handleRequest"
+  handler       = "com.ems.lambda.DbBootstrapHandler::handleRequest"
   runtime       = "java17"
   timeout       = 60
   memory_size  = 512
