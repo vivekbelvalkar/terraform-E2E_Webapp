@@ -11,7 +11,7 @@ resource "aws_security_group" "mysql-rds-sg" {
     # cidr_blocks = ["10.0.1.0/24"] 
     # Since auto scaler will launch EC2's in any of the public subnets 10.0.1.0/24 or/and 10.0.2.0/24
     # we need to allow webservers securiy groups itself.
-    security_groups = [aws_security_group.webservers-security-group.id]
+    security_groups = [aws_security_group.webservers-security-group.id , aws_security_group.lambda_sg.id]
 
   }
 
@@ -100,4 +100,36 @@ resource "aws_security_group" "webservers-alb-sg" {
     protocol = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+resource "aws_security_group" "lambda_sg" {
+  tags = {
+    Name = "${var.env}-lambda-db-bootstrap-sg"
+  }
+  name   = "${var.env}-lambda-db-bootstrap-sg"
+  vpc_id = var.vpc_id
+
+  # egress {
+  #   from_port   = 3306
+  #   to_port     = 3306
+  #   protocol    = "tcp"
+  #   security_groups = [aws_security_group.mysql-rds-sg.id]
+  # } -- creating resource creation cycle , hence use security group rule resource
+
+  #Just in case lambda needs to access other services later
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group_rule" "lambda_to_rds" {
+  type                     = "egress"
+  from_port                = 3306
+  to_port                  = 3306
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.lambda_sg.id
+  source_security_group_id = aws_security_group.mysql-rds-sg.id
 }

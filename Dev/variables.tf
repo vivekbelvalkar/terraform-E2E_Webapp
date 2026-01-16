@@ -43,3 +43,7 @@ variable "master_pass" {
   type = string
   sensitive = true
 }
+
+variable "sql_data_s3_key"{
+  type = string
+}

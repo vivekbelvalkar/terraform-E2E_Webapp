@@ -12,3 +12,7 @@ output "master_pass" {
   value = local.ems_db_master_creds.password
   sensitive = true
 }
+
+output "db_master_secret_arn" {
+  value = aws_secretsmanager_secret.ems_db_master.arn
+}

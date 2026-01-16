@@ -9,3 +9,7 @@ output "webservers-security-group-id" {
 output "webservers-alb-sg-id" {
     value = aws_security_group.webservers-alb-sg.id
 }
+
+output "lambda-sg-id" {
+  value = aws_security_group.lambda_sg.id
+}

@@ -2,9 +2,9 @@ resource "aws_codebuild_project" "ems-codebuild" {
   name          = "${var.env}-ems-codebuild"
   service_role = var.role_arn
 
-  artifacts { type = "CODEPIPELINE" }
-  tags = {
-    name= "${var.env}-ems-codebuild"
+  source {
+    type      = "CODEPIPELINE"
+    buildspec = "buildspec.yml"
   }
 
   environment {
@@ -13,8 +13,11 @@ resource "aws_codebuild_project" "ems-codebuild" {
     type         = "LINUX_CONTAINER"
   }
 
-  source {
-    type      = "CODEPIPELINE"
-    buildspec = "buildspec.yml"
+  artifacts { 
+    type = "CODEPIPELINE" 
+    }
+
+  tags = {
+    name= "${var.env}-ems-codebuild"
   }
 }

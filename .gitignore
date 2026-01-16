@@ -65,3 +65,49 @@ id_ed25519.pub
 
 # Other keys
 *key-pair*
+
+
+# For Lambda-DB-Bootstrap maven project
+# =========================
+# Maven
+# =========================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# =========================
+# Maven Wrapper
+# =========================
+.mvn/wrapper/maven-wrapper.properties
+
+# =========================
+# Java
+# =========================
+*.class
+*.log
+
+# =========================
+# IDE - VS Code
+# =========================
+.vscode/
+.settings/
+.project
+.classpath
+
+# =========================
+# IDE - IntelliJ
+# =========================
+.idea/
+*.iml
+*.iws
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Local environment files
+# =========================
+.env
+.env.*
