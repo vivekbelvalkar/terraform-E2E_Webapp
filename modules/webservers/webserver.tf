@@ -1,6 +1,6 @@
 resource "aws_launch_template" "webservers-launch-template" {
   name   = "${var.env}-ems-webservers-launch-template"
-  image_id      = "${data.aws_ami.ubuntu.id}"
+  image_id      = "ami-0ced6a024bb18ff2e" # "${data.aws_ami.ubuntu.id}" --hardcode for now
   instance_type = "${data.aws_ec2_instance_types.free_tier_instances_type.instance_types[0]}"
 
   iam_instance_profile {
@@ -8,9 +8,10 @@ resource "aws_launch_template" "webservers-launch-template" {
   }
 
   user_data = base64encode(templatefile("user-data.sh", {
-      ENVIRONMENT =  "${var.env}"
+      ENVIRONMENT =  var.env
+      ARTIFACT_BUCKET= var.artifact_bucket
       cw_agent_config = templatefile("cw-agent.json",{
-      ENVIRONMENT = "${var.env}"
+      ENVIRONMENT = var.env
       })
     }))
 
@@ -32,7 +33,8 @@ resource "aws_autoscaling_group" "webserver-autoscaling-group" {
   desired_capacity          = 1
   force_delete              = true
   launch_template {
-        id = aws_launch_template.webservers-launch-template.id   
+        id = aws_launch_template.webservers-launch-template.id
+        version = "$Latest"   
   }      
   vpc_zone_identifier       = [var.public_subnet-1_id, var.public_subnet-2_id]
   target_group_arns         = [var.load-balancer-target-group-arn]

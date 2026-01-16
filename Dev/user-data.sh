@@ -1,14 +1,27 @@
 #!/bin/bash
 yum update -y
-yum install -y java-17-amazon-corretto amazon-cloudwatch-agent ruby wget
+yum install -y java-17-amazon-corretto amazon-cloudwatch-agent awscli # ruby wget
 
-# Install CodeDeploy agent
-cd /home/ec2-user
-wget https://aws-codedeploy-$${AWS_REGION}.s3.$${AWS_REGION}.amazonaws.com/latest/install
-chmod +x ./install
-./install auto
+# # Install CodeDeploy agent
+# cd /home/ec2-user
+# wget https://aws-codedeploy-$${AWS_REGION}.s3.$${AWS_REGION}.amazonaws.com/latest/install
+# chmod +x ./install
+# ./install auto
 
 mkdir -p /opt/app
+sudo chown -R ec2-user:ec2-user /opt/app
+
+# -----------------------------
+# Download JAR from S3
+# -----------------------------
+aws s3 cp s3://"${ARTIFACT_BUCKET}"/ems-app.jar /opt/app/app.jar
+
+# -----------------------------
+# Start Spring Boot app
+# -----------------------------
+nohup java -Xms64m -Xmx128m -jar /opt/app/app.jar \
+  > /opt/app/app.log 2>&1 &
+
 
 # Retrieve DB host,port from SSM parameter
 
