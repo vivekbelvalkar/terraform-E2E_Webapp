@@ -46,6 +46,24 @@ resource "aws_codepipeline" "ems-codepipeline" {
     }
   }
 
+  stage {
+  name = "DB-Bootstrap"
+
+  action {
+    name            = "InvokeLambda"
+    category        = "Invoke"
+    owner           = "AWS"
+    provider        = "Lambda"
+    version         = "1"
+    input_artifacts = ["build"]
+
+    configuration = {
+      FunctionName = var.db_bootstrap_lambda_func_name
+    }
+  }
+}
+
+
   # stage {
   # name = "Deploy"
 

@@ -104,6 +104,7 @@ module "codepipeline"{
   github_repo = var.github_repo
   github_token = var.github_token
   codebuild_project_name = module.codebuild.codebuild_project_name
+  db_bootstrap_lambda_func_name = module.lambda-db-bootstrap.db_bootstrap_lambda_func_name
   # codedeploy_app_name = module.codedeploy.codedeploy_app_name
   # codedeploy_deployment_group = module.codedeploy.codedeploy_deployment_group
 }

@@ -48,6 +48,14 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         Effect = "Allow"
         Action = "iam:PassRole"
         Resource = "*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+        "lambda:InvokeFunction",
+        "codebuild:StartBuild"
+         ]
+        Resource = "*"
       }
     ]
   })
