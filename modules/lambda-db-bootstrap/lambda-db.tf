@@ -6,7 +6,7 @@ resource "aws_lambda_function" "db_bootstrap" {
   timeout       = 60
   memory_size  = 512
 
-  filename = "../../lambda-db-bootstrap/target/db-bootstrap-lambda.jar"
+  filename = "../lambda-db-bootstrap/target/db-bootstrap-lambda.jar"
 
   vpc_config {
     subnet_ids         = var.vpc_subnet_ids
