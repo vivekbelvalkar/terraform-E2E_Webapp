@@ -14,6 +14,9 @@ resource "aws_lb_target_group" "load-balancer-target-group" {
   port     = 8080
   protocol = "HTTP"
   vpc_id   = var.vpc_id
+  health_check {
+    path = "/actuator/health"
+  }
   tags = {
     name= "${var.env}-ems-lb-target-group"
   }
@@ -27,7 +30,7 @@ resource "aws_lb_listener" "webserver_listner" {
   count = var.create_lb == true ? 1:0
   
   load_balancer_arn = aws_lb.webservers-load-balancer[0].arn
-  port              = "80"
+  port              = "8080"
   protocol          = "HTTP"
 
   default_action {
