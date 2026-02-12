@@ -7,6 +7,7 @@ resource "aws_lambda_function" "db_bootstrap" {
   memory_size  = 512
 
   filename = "../lambda-db-bootstrap/target/db-bootstrap-lambda.jar"
+  source_code_hash = filebase64sha256("../lambda-db-bootstrap/target/db-bootstrap-lambda.jar")
 
   vpc_config {
     subnet_ids         = var.vpc_subnet_ids
