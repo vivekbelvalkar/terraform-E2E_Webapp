@@ -14,6 +14,7 @@ resource "aws_db_instance" "mysql-rds" {
   db_subnet_group_name = aws_db_subnet_group.mysql-rds-subnet-group.name
   parameter_group_name = aws_db_parameter_group.mysql-parameter-group.name
   multi_az = "false"
+  skip_final_snapshot = true
 }
 
 resource "aws_db_subnet_group" "mysql-rds-subnet-group" {
