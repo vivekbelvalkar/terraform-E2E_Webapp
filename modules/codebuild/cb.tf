@@ -43,15 +43,14 @@ resource "aws_codebuild_project" "asg_refresh" {
 
   source {
     type      = "NO_SOURCE"
-    buildspec = <<EOF
-    version: 0.2
-    phases:
+    buildspec = <<-EOF
+  version: 0.2
+
+  phases:
     build:
-    commands:
-      - echo "Starting ASG instance refresh"
-      - aws autoscaling start-instance-refresh \
-          --auto-scaling-group-name $ASG_NAME \
-          --preferences MinHealthyPercentage=50
-    EOF
+      commands:
+        - echo "Starting ASG instance refresh"
+        - aws autoscaling start-instance-refresh --auto-scaling-group-name $ASG_NAME --preferences MinHealthyPercentage=50
+EOF
   }
 }
