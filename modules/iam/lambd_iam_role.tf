@@ -78,3 +78,22 @@ resource "aws_iam_role_policy" "lambda_s3_policy" {
     ]
   })
 }
+
+resource "aws_iam_role_policy" "lambda_codepipeline_policy" {
+  name = "${var.env}-ems-lambda-codepipeline-policy"
+  role = aws_iam_role.lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "codepipeline:PutJobSuccessResult",
+          "codepipeline:PutJobFailureResult"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}

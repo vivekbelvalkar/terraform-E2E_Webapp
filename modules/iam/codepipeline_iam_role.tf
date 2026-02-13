@@ -21,7 +21,7 @@ resource "aws_iam_role" "codepipeline" {
 # } -----> Did not work , hence inline policy (this one can be used instead "arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess")
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
-  name = "dev-ems-codepipeline-policy"
+  name = "${var.env}-ems-codepipeline-policy"
   role = aws_iam_role.codepipeline.id
 
   policy = jsonencode({

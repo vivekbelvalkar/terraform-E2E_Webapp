@@ -10,14 +10,23 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.secretsmanager.*;
 import software.amazon.awssdk.services.secretsmanager.model.*;
 
+import software.amazon.awssdk.services.codepipeline.CodePipelineClient;
+import software.amazon.awssdk.services.codepipeline.model.PutJobSuccessResultRequest;
+import software.amazon.awssdk.services.codepipeline.model.PutJobFailureResultRequest;
+
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
+import java.util.Map;
+
 import org.json.JSONObject;
 
-public class DbBootstrapHandler implements RequestHandler<Object, String> {
+public class DbBootstrapHandler implements RequestHandler<Map<String, Object>, String> {
 
     @Override
-    public String handleRequest(Object input, Context context) {
+    public String handleRequest(Map<String, Object> event, Context context) {
+
+        CodePipelineClient codePipeline = CodePipelineClient.create();
+        String jobId = (String) ((Map<?, ?>) event.get("CodePipeline.job")).get("id");
         try {
             SecretsManagerClient client = SecretsManagerClient.create();
 
@@ -78,10 +87,22 @@ public class DbBootstrapHandler implements RequestHandler<Object, String> {
 
             conn.close();
 
-            return "DB bootstrap successful";
+            codePipeline.putJobSuccessResult(
+                PutJobSuccessResultRequest.builder()
+                        .jobId(jobId)
+                        .build());
 
+            context.getLogger().log("Lambda invoked successfully");
+            return "Success";
         } catch (Exception e) {
+            codePipeline.putJobFailureResult(
+                PutJobFailureResultRequest.builder()
+                        .jobId(jobId)
+                        .failureDetails(f -> f
+                                .message(e.getMessage())
+                                .type("JobFailed"))
+                        .build());
             throw new RuntimeException(e);
         }
-    }
+    }   
 }
