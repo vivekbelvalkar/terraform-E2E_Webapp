@@ -3,6 +3,7 @@ resource "aws_secretsmanager_secret" "ems_db_master" {
   tags = {
     name= "${var.env}-ems-db-master-credentials"
   }
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "ems_db_master_creds" {
@@ -19,6 +20,7 @@ resource "aws_secretsmanager_secret" "ems_db_appuser" {
   tags = {
     name= "${var.env}-ems-db-appuser-credentials"
   }
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "ems_db_appuser_creds" {
