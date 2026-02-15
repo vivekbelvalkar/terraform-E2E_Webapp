@@ -116,6 +116,7 @@ module "codebuild" {
   env = var.env
   role_arn = module.iam.codebuild_role_arn
   asg_name = module.webservers.asg_name
+  bucket = module.s3.bucket_name
 }
 
 # module "codedeploy" {
