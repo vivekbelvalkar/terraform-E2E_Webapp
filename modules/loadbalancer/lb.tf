@@ -30,7 +30,7 @@ resource "aws_lb_listener" "webserver_listner" {
   count = var.create_lb == true ? 1:0
   
   load_balancer_arn = aws_lb.webservers-load-balancer[0].arn
-  port              = "8080"
+  port              = "80"
   protocol          = "HTTP"
 
   default_action {
