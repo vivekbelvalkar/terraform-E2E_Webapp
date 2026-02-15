@@ -70,7 +70,7 @@ resource "aws_iam_role_policy" "codebuild_s3_policy" {
       {
         Effect = "Allow"
         Action = ["s3:ListBucket","s3:PutObject","s3:GetObject","s3:GetObjectVersion"]
-        Resource = "arn:aws:s3:::dev-ems-artifacts/*"
+        Resource = "arn:aws:s3:::${var.bucket}/*"
       }
     ]
   })

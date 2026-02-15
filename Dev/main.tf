@@ -88,6 +88,7 @@ module "rds"{
 module "iam" {
   source = "../modules/iam"
   env = var.env
+  bucket = module.s3.bucket_name
 }
 
 module "s3"{

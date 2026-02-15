@@ -68,12 +68,12 @@ resource "aws_iam_role_policy" "lambda_s3_policy" {
       {
         Effect = "Allow"
         Action = ["s3:ListBucket"]
-        Resource = "arn:aws:s3:::dev-ems-artifacts"
+        Resource = "arn:aws:s3:::${var.bucket}"
       },
       {
         Effect = "Allow"
         Action = ["s3:GetObject"]
-        Resource = "arn:aws:s3:::dev-ems-artifacts/db/*"
+        Resource = "arn:aws:s3:::${var.bucket}/db/*"
       }
     ]
   })
