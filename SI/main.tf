@@ -42,7 +42,7 @@ module "loadbalancer"{
   public_subnet-1_id=module.subnet.public_subnet-1_id
   public_subnet-2_id=module.subnet.public_subnet-2_id
   webservers-alb-sg-id=module.security_groups.webservers-alb-sg-id
-  create_lb = false
+  create_lb = var.create_lb
 }
 
 module "webservers"{
@@ -52,7 +52,27 @@ module "webservers"{
   public_subnet-1_id=module.subnet.public_subnet-1_id
   public_subnet-2_id=module.subnet.public_subnet-2_id
   load-balancer-target-group-arn=module.loadbalancer.load-balancer-target-group-arn
-  webservers-key-pair-key_name="dev-webservers-key-pair"
+  webservers-key-pair-key_name= var.webserver_key_pair_name
+  instance_profile = module.iam.ec2_instance_profile
+  artifact_bucket = module.s3.bucket_name
+  depends_on = [ module.rds ]
+}
+
+module "aws_secretsmanager_secret" {
+  source = "../modules/secrets"
+  env = var.env
+  master_user = var.master_user
+  master_pass = var.master_pass
+  app_user = var.app_user
+  app_password = var.app_password
+  database = var.database
+}
+
+module "ssmparameter"{
+  source = "../modules/ssmparameter"
+  env = var.env
+  db_host = module.rds.db_host
+  db_port = module.rds.db_port
 }
 
 module "rds"{
@@ -61,4 +81,68 @@ module "rds"{
   mysql-rds-sg-id = module.security_groups.mysql-rds-sg
   private_subnet-1_id = module.subnet.private_subnet-1_id
   private_subnet-2_id = module.subnet.private_subnet-2_id
+  master_user = module.aws_secretsmanager_secret.master_user
+  master_pass = module.aws_secretsmanager_secret.master_pass
+}
+
+module "iam" {
+  source = "../modules/iam"
+  env = var.env
+  bucket = module.s3.bucket_name
+}
+
+module "s3"{
+  source = "../modules/s3"
+  env = var.env
+}
+
+module "codepipeline"{
+  source = "../modules/codepipeline"
+  env = var.env
+  role_arn = module.iam.codepipeline_role_arn
+  bucket = module.s3.bucket_name
+  github_owner = var.github_owner
+  github_repo = var.github_repo
+  github_token = var.github_token
+  codebuild_project_name = module.codebuild.codebuild_project_name
+  db_bootstrap_lambda_func_name = module.lambda-db-bootstrap.db_bootstrap_lambda_func_name
+  asg_refresh_codebuild_project_name = module.codebuild.asg_refresh_codebuild_project_name
+  # codedeploy_app_name = module.codedeploy.codedeploy_app_name
+  # codedeploy_deployment_group = module.codedeploy.codedeploy_deployment_group
+}
+
+module "codebuild" {
+  source = "../modules/codebuild"
+  env = var.env
+  role_arn = module.iam.codebuild_role_arn
+  asg_name = module.webservers.asg_name
+}
+
+# module "codedeploy" {
+#   source = "../modules/codedeploy"
+#   env = var.env
+#   codedeploy_role_arn = module.iam.codedeploy_role_arn
+#   asg_name = module.webservers.asg_name
+#   target_group_name = module.loadbalancer.target_group_name
+# }
+
+module "lambda-db-bootstrap" {
+  source = "../modules/lambda-db-bootstrap"
+  env = var.env
+  db_name = var.database
+  db_host = module.rds.db_host
+  db_port = module.rds.db_port
+  db_master_secret_arn = module.aws_secretsmanager_secret.db_master_secret_arn
+  app_db_user = var.app_user
+  app_db_password = var.app_password
+  sql_data_s3_key = var.sql_data_s3_key
+  bucket_name = module.s3.bucket_name
+  vpc_subnet_ids = [module.subnet.private_subnet-1_id,module.subnet.private_subnet-2_id]
+  security_group_ids = [module.security_groups.lambda-sg-id]
+  lambda_role_arn = module.iam.lambda_role_arn
+}
+
+module "cloudwatch"{
+  source = "../modules/cloudwatch"
+  env = var.env
 }
