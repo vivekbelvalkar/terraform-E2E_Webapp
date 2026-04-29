@@ -3,6 +3,7 @@ variable "role_arn" {}
 variable "bucket" {}
 variable "github_owner" {}
 variable "github_repo" {}
+variable "github_branch" {}
 variable "github_token" {}
 variable "codebuild_project_name" {}
 variable "db_bootstrap_lambda_func_name" {}

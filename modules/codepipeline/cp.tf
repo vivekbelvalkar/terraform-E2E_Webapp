@@ -23,7 +23,7 @@ resource "aws_codepipeline" "ems-codepipeline" {
       configuration = {
         Owner      = var.github_owner
         Repo       = var.github_repo
-        Branch     = "main"
+        Branch     = var.github_branch
         OAuthToken = var.github_token
       }
     }

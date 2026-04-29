@@ -103,6 +103,7 @@ module "codepipeline"{
   bucket = module.s3.bucket_name
   github_owner = var.github_owner
   github_repo = var.github_repo
+  github_branch = var.github_branch
   github_token = var.github_token
   codebuild_project_name = module.codebuild.codebuild_project_name
   db_bootstrap_lambda_func_name = module.lambda-db-bootstrap.db_bootstrap_lambda_func_name

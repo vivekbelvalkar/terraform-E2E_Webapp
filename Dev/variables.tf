@@ -1,3 +1,7 @@
+variable "aws_profile" {
+  type = string
+  default = "dev"
+}
 variable "env" {
     type = string
     default = "dev"
@@ -5,7 +9,6 @@ variable "env" {
 
 variable "region" {
     type = string
-    default = "ap-south-1"
 }
 variable "webserver_key_pair_name" {
   type = string
@@ -15,6 +18,10 @@ variable "github_owner" {
 }
 
 variable "github_repo" {
+  type = string
+}
+
+variable "github_branch" {
   type = string
 }
 
